@@ -190,6 +190,14 @@
 	ticker.mode.update_hog_icons_removed(src, "red")
 	ticker.mode.update_hog_icons_removed(src, "blue")
 
+/datum/mind/proc/remove_arcane()
+	if(src in ticker.mode.arcane)
+	ticker.mode.remove_arcane(src,0,0)
+	special_role = null
+	remove_objectives()
+	remove_antag_equip()
+	
+
 
 
 /datum/mind/proc/remove_antag_equip()
@@ -211,11 +219,13 @@
 	remove_cultist()
 	remove_rev()
 	remove_gang()
+	remove_arcane()
 	ticker.mode.update_changeling_icons_removed(src)
 	ticker.mode.update_traitor_icons_removed(src)
 	ticker.mode.update_wiz_icons_removed(src)
 	ticker.mode.update_cult_icons_removed(src)
 	ticker.mode.update_rev_icons_removed(src)
+	ticker.mode.update_arcane_icons_remove(src)
 	if(gang_datum)
 		gang_datum.remove_gang_hud(src)
 
@@ -260,6 +270,7 @@
 		"cyberman",
 		"monkey",
 		"clockcult"
+		"arcane"
 	)
 	var/text = ""
 
@@ -366,6 +377,30 @@
 			text += "|Disabled in Prefs"
 
 		sections["cult"] = text
+	
+		/************************** ARCANE WEW ********/
+		text = "arcane"
+		if (ticker.mode.config_tag=="arcane")
+			text = uppertext(text)
+		text = "<i><b>[text]</b></i>: "
+		if (src in ticker.mode.arcane)
+			text += "loyal|<a href='?src=\ref[src];cult=clear'>employee</a>|<b>Arcanist</b>"
+			text += "<br>There should probably be a thing here but I don't know what to put here."
+/*
+			if (objectives.len==0)
+				text += "<br>Objectives are empty! Give them the portal objective, also known as the only objective you can? <a href='?src=\ref[src];arcane=portal_home'>Yus</a>."
+*/
+		else if(isloyal(current))
+			text += "<b>LOYAL</b>|employee|<a href='?src=\ref[src];arcane=arcane'>arcane</a>"
+		else
+			text += "loyal|<b>EMPLOYEE</b>|<a href='?src=\ref[src];arcane=arcane'>arcane</a>"
+
+		if(current && current.client && (ROLE_ARCANE in current.client.prefs.be_special))
+			text += "|Enabled in Prefs"
+		else
+			text += "|Disabled in Prefs"
+
+		sections["arcane"] = text
 
 		/** CLOCKWORK CULT **/
 		text = "clockwork cult"
@@ -1069,6 +1104,18 @@
 				if (!ticker.mode.equip_cultist(current))
 					usr << "<span class='danger'>Spawning amulet failed!</span>"
 
+	else if (href_list["arcane"])
+		switch(href_list["arcane"])
+			if("clear")
+				remove_arcane()
+				message_admins("[key_name_admin(usr)] has removed the powers of the arcane from [current].")
+				log_admin("[key_name(usr)] has un-arcane'd [current].")
+			if("arcane")
+				if(!(src in ticker.mode.arcane))
+					ticker.mode.add_arcane(src, 0)
+					message_admins("[key_name_admin(usr)] has given arcane powers to [current].")
+					log_admin("[key_name(usr)] has arcane'd [current].")
+
 	else if(href_list["clockcult"])
 		switch(href_list["clockcult"])
 			if("clear")
@@ -1545,10 +1592,29 @@
 			current.memory += "<B>Objective #1</B>: [explanation]<BR>"
 			current << "The convert rune is join blood self"
 			current.memory += "The convert rune is join blood self<BR>"
-
+			
 	var/mob/living/carbon/human/H = current
 	if (!ticker.mode.equip_cultist(current))
 		H << "Spawning an amulet from your Master failed."
+
+/datum/mind/proc/make_Arcane()
+	if(!(src in ticker.mode.arcane))
+		ticker.mode.arcane += src
+		ticker.mode.update_arcane_icons_added(src)
+		special_role = "Arcanist"
+		current << "<font color=\"purple\"><b><i>You are a reject from the school of wizardry, the wizard academy. Annoyed and agitated by their decision to expel you, you have teamed up a few others to try and make a portal back.</b></i></font>"
+		current << "<font color=\"purple\"><b><i>Work well with your friends, and remember, you are a wizard, not just some plebian who cuts his wrist or plays with clocks...</b></i></font>"
+		var/datum/game_mode/arcane/arcane = ticker.mode
+
+		if (istype(arcane))
+			arcane.memorize_arcane_objectives(src)
+		else
+			var/explanation = "Create a way back to the wizard academy with the use of your lesser magic. The Arcane Sanctum will aid you in doing this."
+			current << "<B>Objective #1</B>: [explanation]"
+			current.memory += "<B>Objective #1</B>: [explanation]<BR>"
+			current << "Your first step should be to create a portal to the Arcane Sanctum."
+			current.memory += "Your first step should be to create a portal to the Arcane Sanctum.<BR>"
+
 
 /datum/mind/proc/make_Rev()
 	if (ticker.mode.head_revolutionaries.len>0)
