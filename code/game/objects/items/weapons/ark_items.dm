@@ -1,4 +1,4 @@
-//This is where the overpowered items you get from the Ark gauntlet go.
+//Overpowered ark stuff.
 
 /obj/item/organ/cyberimp/eyes/shield/ark_eyes
 	name = "enhanced eyes"
@@ -12,9 +12,8 @@
 /obj/item/weapon/reality_prime
 	name = "Reality Prime"
 	desc = "This glowing orb is brimming with strange words and data."
-	icon = 'icons/obj/projectiles.dmi' //uses the same sprite the cultist cursed orb uses
-	icon_state ="bluespace"
-	color = "#ff0000"
+	icon = 'icons/obj/ark.dmi'
+	icon_state ="reality"
 	var/list/datahuds = list(DATA_HUD_SECURITY_ADVANCED, DATA_HUD_MEDICAL_ADVANCED, DATA_HUD_DIAGNOSTIC)
 	var/list/mutations = list(XRAY, TK)
 
@@ -38,3 +37,31 @@
 		user.apply_damage(5, BURN)
 		user.unEquip(src)
 		return
+
+
+//Megafauna souls.
+
+/obj/item/weapon/soul/colossus
+	name = "soul of a colossus"
+	desc = "An orb containing the soul of a colossus."
+	icon = 'icons/obj/ark.dmi'
+	icon_state = "orb1"
+
+/obj/item/weapon/soul/ashdrake
+	name = "soul of an ash drake"
+	desc = "An orb containing the soul of ash drake."
+	icon = 'icons/obj/ark.dmi'
+	icon_state = "orb2"
+
+/obj/item/weapon/soul/legion
+	name = "souls of legion"
+	desc = "An orb containing a some souls of legion."
+	icon = 'icons/obj/ark.dmi'
+	icon_state = "orb3"
+
+/obj/item/weapon/soul/bubblegum
+	name = "soul fragment of bubblegum"
+	desc = "An orb containing a fragment of bubblegum's soul."
+	icon = 'icons/obj/ark.dmi'
+	icon_state = "orb4"
+
