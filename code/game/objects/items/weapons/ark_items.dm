@@ -42,7 +42,7 @@
 	name = "Augment Prime"
 	desc = "A semi-solid orb with small hooks on it. It looks like it can attach to things."
 	icon = 'icons/obj/ark.dmi'
-	icon_state = "reality"
+	icon_state = "augment"
 	var/enhancement = 30
 
 
