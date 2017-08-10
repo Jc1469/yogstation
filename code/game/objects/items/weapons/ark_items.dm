@@ -38,6 +38,29 @@
 		user.unEquip(src)
 		return
 
+/obj/item/weapon/augment_prime
+	name = "Augment Prime"
+	desc = "A semi-solid orb with small hooks on it. It looks like it can attach to things."
+	icon = 'icons/obj/ark.dmi'
+	icon_state = "reality"
+	var/enhancement = 30
+
+
+/obj/item/weapon/augment_prime/afterattack(obj/item/I, mob/user) //this is taken from sharpener.dm code, but it's not exactly alike so I can't just make it a subtype
+	if(I.force) //to prevent things that are useless, like pens, being augmented
+		if(istype(I, /obj/item/weapon/twohanded))
+			var/obj/item/weapon/twohanded/TH = I
+			if(TH.wielded)
+				user << "<span class='notice'>[TH] must be unwielded before it can be enhanced.</span>"
+				return
+			TH.force_wielded = Clamp(TH.force_wielded + enhancement)
+		user.visible_message("<span class='notice'>[user] attaches [src] to [I] !</span>", "<span class='notice'>You attach [src] to [I]. It feels much more dangerous now.</span>")
+		I.force = Clamp(I.force + enhancement)
+		I.throwforce = Clamp(I.throwforce + enhancement)
+		I.name = "/improper Augmented [I.name]"
+	else
+		user << "<span class='warning'>[src] refuses to attach to [I].</span>"
+		return
 
 //Megafauna souls.
 
