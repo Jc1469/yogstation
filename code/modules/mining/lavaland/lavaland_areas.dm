@@ -32,3 +32,6 @@
 
 /area/lavaland/surface/outdoors/mapgen_protected
 	mapgen_protected = 1
+	
+/area/lavaland/ark
+	name = "Ark"

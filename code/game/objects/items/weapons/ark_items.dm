@@ -13,7 +13,7 @@
 	name = "Reality Prime"
 	desc = "This glowing orb is brimming with strange words and data."
 	icon = 'icons/obj/ark.dmi'
-	icon_state ="reality"
+	icon_state = "reality"
 	var/list/datahuds = list(DATA_HUD_SECURITY_ADVANCED, DATA_HUD_MEDICAL_ADVANCED, DATA_HUD_DIAGNOSTIC)
 	var/list/mutations = list(XRAY, TK)
 
